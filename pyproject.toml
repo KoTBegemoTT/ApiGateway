@@ -7,10 +7,30 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+fastapi = "^0.111.1"
 
 [tool.poetry.group.dev.dependencies]
 wemake-python-styleguide = "^0.19.2"
 pytest = "^8.2.2"
+mypy = "^1.10.1"
+coverage = "^7.5.4"
+coverage-threshold = "^0.4.4"
+pytest-asyncio = "^0.23.8"
+
+[tool.isort]
+multi_line_output = '3'
+include_trailing_comma = 'True'
+force_grid_wrap = '0'
+use_parentheses = 'True'
+ensure_newline_before_comments = 'True'
+line_length = '79'
+
+[tool.pytest.ini_options]
+pythonpath = ". src"
+testpaths = ["src/tests"]
+
+[tool.coverage.run]
+command_line = "-m pytest"
 
 [build-system]
 requires = ["poetry-core"]

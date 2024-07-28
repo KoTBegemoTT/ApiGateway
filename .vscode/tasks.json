@@ -8,9 +8,24 @@
             "command": "poetry run flake8 --jobs=1 src/app",
         },
         {
+            "label": "Flake8_tests",
+            "type": "shell",
+            "command": "poetry run flake8 --config='.flake8_tests' --jobs=1 src/tests",
+        },
+        {
             "label": "ISort",
             "type": "shell",
-            "command": "poetry run isort src/app",
-        }
+            "command": "poetry run isort src",
+        },
+        {
+            "label": "MyPy",
+            "type": "shell",
+            "command": "poetry run mypy src/app",
+        },
+        {
+            "label": "Coverage",
+            "type": "shell",
+            "command": "poetry run coverage run -m pytest src/tests && coverage xml -i && coverage report",
+        },
     ]
 }

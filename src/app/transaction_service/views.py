@@ -14,7 +14,7 @@ async def create_transaction_view(
     """Создание новой транзакции."""
     async with httpx.AsyncClient() as client:
         await client.post(
-            f'{settings.transactions_service_url}/create',
+            f'{settings.transactions_service_url}/create/',
             json=transaction.model_dump(),
         )
 
@@ -25,7 +25,7 @@ async def get_transactions_view(
     """Получение списка транзакций."""
     async with httpx.AsyncClient() as client:
         response = await client.post(
-            f'{settings.transactions_service_url}/report',
+            f'{settings.transactions_service_url}/report/',
             json=report.model_dump(),
         )
 

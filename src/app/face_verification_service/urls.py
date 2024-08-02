@@ -9,6 +9,6 @@ router = APIRouter(tags=['face_verification'])
     '/get_vector/',
     status_code=status.HTTP_200_OK,
 )
-async def create_transaction(path: str) -> list[float]:
+async def get_vector(path: str) -> list[float]:
     """Создание новой транзакции."""
     return await image_to_vector(path)

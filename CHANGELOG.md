@@ -16,6 +16,7 @@
 
 - Docker compose
 - url /auth_service/check_token, для проверки токена на валидность
+- Добавлены сабмодули в папке submodules в корне
 
 ### Изменено
 

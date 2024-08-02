@@ -8,10 +8,11 @@
 ### Auth service
 Сервис для аунтификации.
 
-| Method | Path                     | Description                             |
-|--------|--------------------------|-----------------------------------------|
-| POST   | /auth-service/register/  | Регистрация пользователя                |
-| POST   | /auth-service/auth/      | Получение или обновление токена         |
+| Method | Path                       | Description                            |
+|--------|----------------------------|----------------------------------------|
+| POST   | /auth-service/register/    | Регистрация пользователя               |
+| POST   | /auth-service/auth/        | Получение или обновление токена        |
+| GET    | /auth-service/check_token/ | Проверка токена на валидность          |
 
 
 ### Transaction service

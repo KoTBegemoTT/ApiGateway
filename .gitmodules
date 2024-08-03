@@ -10,9 +10,3 @@
 	path = submodules/face_verification_service
 	url = git@hub.mos.ru:shift-python/y2024/homeworks/plebedev/faceverification.git
 	branch = task-6
-[submodule "fastapi_kafka/producer"]
-	path = submodules/fastapi_kafka/producer
-	url = git@hub.mos.ru:viktor.shv1995/producer.git
-[submodule "fastapi_kafka/consumer"]
-	path = submodules/fastapi_kafka/consumer
-	url = git@hub.mos.ru:viktor.shv1995/consumer.git

@@ -26,37 +26,6 @@ services:
         depends_on:
             - zookeeper
 
-    producer:
-        build:
-            context: ./submodules/fastapi_kafka/producer
-            dockerfile: Dockerfile
-        command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
-        ports:
-            - 8080:8000
-        volumes:
-            - ./fastapi_kafka/producer:/usr/src/app
-        environment:
-            - KAFKA_HOST=kafka
-            - KAFKA_PORT=9092
-        depends_on:
-            - kafka
-            - zookeeper
-
-    consumer:
-        build:
-            context: ./submodules/fastapi_kafka/consumer
-            dockerfile: Dockerfile
-        command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
-        volumes:
-            - ./fastapi_kafka/consumer:/usr/src/app
-        environment:
-            - KAFKA_HOST=kafka
-            - KAFKA_PORT=9092
-            - KAFKA_TOPICS=faces
-        depends_on:
-            - kafka
-            - zookeeper
-
     api-gateway:
         build: .
         command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000

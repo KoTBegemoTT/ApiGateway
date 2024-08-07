@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
+from app.api_gateway.urls import router as api_gateway_router
 from app.auth_service.urls import router as auth_router
 from app.face_verification_service.urls import (
     router as face_verification_router,
@@ -13,6 +14,7 @@ app.include_router(transaction_router, prefix='/transaction-service')
 app.include_router(
     face_verification_router, prefix='/face-verification-service',
 )
+app.include_router(api_gateway_router, prefix='/api-gateway')
 
 
 @app.get('/')

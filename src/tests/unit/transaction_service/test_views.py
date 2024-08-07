@@ -42,7 +42,7 @@ async def test_create_transaction_view_no_error(monkeypatch, transaction):
 
 
 @pytest.mark.asyncio
-async def test_login_view(monkeypatch):
+async def test_get_transactions_view(monkeypatch):
     async def post_mock(*args, **kwargs) -> httpx.Response:
         return httpx.Response(
             201,

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, status
 
+from app.auth_service.views import check_token_dependency
 from app.transaction_service.schemas import (
     CreateTransactionSchema,
     TransactionReportSchema,
@@ -19,6 +20,7 @@ router = APIRouter(tags=['transaction_service'])
 )
 async def create_transaction(transaction: CreateTransactionSchema) -> None:
     """Создание новой транзакции."""
+    await check_token_dependency(transaction.user_id)
     await create_transaction_view(transaction)
 
 
@@ -30,4 +32,5 @@ async def get_transactions(
     transaction_report: TransactionReportSchema,
 ) -> list[TransactionSchema]:
     """Получение списка транзакции."""
+    await check_token_dependency(transaction_report.user_id)
     return await get_transactions_view(transaction_report)

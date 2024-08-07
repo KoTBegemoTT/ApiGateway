@@ -40,17 +40,15 @@ async def login_view(user_in: UserSchema) -> TokenSchema:
     )
 
 
-async def check_token_view(token: str) -> str:
+async def check_token_dependency(user_id: int) -> None:
     """Проверка токена. Возвращает имя пользователя."""
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f'{settings.auth_service_url}/check_token/',
-            params={'token': token},
+            params={'user_id': user_id},
         )
-    if response.status_code == status.HTTP_200_OK:
-        return response.json()
-
-    raise HTTPException(
-        status_code=response.status_code,
-        detail=response.json().get('detail', 'No detail'),
-    )
+    if response.status_code != status.HTTP_200_OK:
+        raise HTTPException(
+            status_code=response.status_code,
+            detail=response.json().get('detail', 'No detail'),
+        )

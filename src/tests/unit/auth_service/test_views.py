@@ -3,7 +3,11 @@ import pytest
 from fastapi import HTTPException, status
 
 from app.auth_service.schemas import UserSchema
-from app.auth_service.views import check_token_view, login_view, register_view
+from app.auth_service.views import (
+    check_token_dependency,
+    login_view,
+    register_view,
+)
 
 
 @pytest.mark.asyncio
@@ -105,7 +109,7 @@ async def test_login_view_fail(
 
 
 @pytest.mark.asyncio
-async def test_check_token_view(monkeypatch):
+async def test_check_token_dependency(monkeypatch):
     async def get_mock(*args, **kwargs) -> httpx.Response:
         return httpx.Response(status.HTTP_200_OK, json='admin')
 
@@ -114,9 +118,7 @@ async def test_check_token_view(monkeypatch):
         get_mock,
     )
 
-    username = await check_token_view('token')
-
-    assert username == 'admin'
+    await check_token_dependency(user_id=0)
 
 
 @pytest.mark.asyncio
@@ -127,11 +129,11 @@ async def test_check_token_view(monkeypatch):
                      id='token_expired'),
         pytest.param(status.HTTP_401_UNAUTHORIZED, 'invalid token',
                      id='invalid_token'),
-        pytest.param(status.HTTP_404_NOT_FOUND, 'User not found',
-                     id='user_not_found'),
+        pytest.param(status.HTTP_404_NOT_FOUND, 'token not found',
+                     id='token_not_found'),
     ],
 )
-async def test_check_token_view_fail(monkeypatch, status, detail):
+async def test_check_token_dependency_fail(monkeypatch, status, detail):
     async def get_mock(*args, **kwargs) -> httpx.Response:
         return httpx.Response(status_code=status, json={'detail': detail})
 
@@ -141,7 +143,7 @@ async def test_check_token_view_fail(monkeypatch, status, detail):
     )
 
     with pytest.raises(HTTPException) as excinfo:
-        await check_token_view('token')
+        await check_token_dependency(user_id=0)
 
     assert excinfo.value.status_code == status
     assert excinfo.value.detail == detail

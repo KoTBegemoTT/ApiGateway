@@ -1,7 +1,11 @@
 from fastapi import APIRouter, status
 
 from app.auth_service.schemas import TokenSchema, UserSchema
-from app.auth_service.views import check_token_view, login_view, register_view
+from app.auth_service.views import (
+    check_token_dependency,
+    login_view,
+    register_view,
+)
 
 router = APIRouter(tags=['auth_service'])
 
@@ -30,6 +34,6 @@ async def login(user_in: UserSchema) -> TokenSchema:
     '/check_token/',
     status_code=status.HTTP_200_OK,
 )
-async def check_token(token: str) -> str:
+async def check_token(user_id: int) -> None:
     """Проверка токена. Возвращает имя пользователя."""
-    return await check_token_view(token)
+    await check_token_dependency(user_id)

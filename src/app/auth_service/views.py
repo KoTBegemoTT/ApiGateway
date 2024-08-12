@@ -1,5 +1,5 @@
 import httpx
-from fastapi import HTTPException, status
+from fastapi import HTTPException, UploadFile, status
 
 from app.auth_service.schemas import TokenSchema, UserSchema
 from app.settings import settings
@@ -52,3 +52,21 @@ async def check_token_dependency(user_id: int) -> None:
             status_code=response.status_code,
             detail=response.json().get('detail', 'No detail'),
         )
+
+
+async def verify_view(user_photo: UploadFile, user_id: int) -> dict:
+    """Подтверждение пользователя."""
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            f'{settings.auth_service_url}/verify/',
+            files={'user_photo': await user_photo.read()},
+            params={'user_id': user_id},
+        )
+
+    if response.status_code != status.HTTP_201_CREATED:
+        raise HTTPException(
+            status_code=response.status_code,
+            detail=response.json().get('detail', 'No detail'),
+        )
+
+    return {'message': 'File saved successfully'}

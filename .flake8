@@ -9,6 +9,8 @@ ignore =
     D104,
     # Found upper-case constant in a class
     WPS115,
+    # Found string literal over-use
+    WPS226,
     # Found `f` string
     WPS305,
     # Found using `@staticmethod`

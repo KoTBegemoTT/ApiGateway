@@ -1,9 +1,13 @@
 [flake8]
 ignore =
+    # Found wrong variable name
+    WPS110,
     # Found too short name
     WPS111,
     # Found underscored number name pattern
     WPS114,
+    # Found too many module members
+    WPS202,
     # Found Found overused expression
     WPS204,
     # Found too many `assert` statements

@@ -8,7 +8,7 @@
 | GET    | /api-gateway/healthz/ready/| Проверка статуса сервиса               |
 
 
-## Services
+## Методы для обращения к другим сервисам
 
 ### Auth service
 Сервис для аунтификации.
@@ -18,6 +18,7 @@
 | POST   | /auth-service/register/    | Регистрация пользователя               |
 | POST   | /auth-service/auth/        | Получение или обновление токена        |
 | GET    | /auth-service/check_token/ | Проверка токена на валидность          |
+| POST   | /auth-service/verify/      | Подтверждение пользователя по фото     |
 
 
 ### Transaction service

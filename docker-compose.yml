@@ -25,6 +25,11 @@ services:
             - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
         depends_on:
             - zookeeper
+        healthcheck:
+            test: [ "CMD", "kafka-topics.sh", "--bootstrap-server", "kafka:9092", "--list" ]
+            interval: 5s
+            timeout: 5s
+            retries: 20
 
     api-gateway:
         build: .
@@ -37,6 +42,16 @@ services:
         command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8001
         ports:
             - 8001:8001
+        volumes:
+            - ./fastapi_kafka/producer:/usr/src/app
+            - photo-storage:/usr/photos
+        environment:
+            - KAFKA_HOST=kafka
+            - KAFKA_PORT=9092
+            - KAFKA_PRODUCER_TOPIC=faces
+        depends_on:
+            kafka:
+                condition: service_healthy
 
     transaction:
         build: ./submodules/transaction_service
@@ -49,3 +64,16 @@ services:
         command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8003
         ports:
             - 8003:8003
+        volumes:
+            - ./fastapi_kafka/consumer:/usr/src/app
+            - photo-storage:/usr/photos
+        environment:
+            - KAFKA_HOST=kafka
+            - KAFKA_PORT=9092
+            - KAFKA_CONSUMER_TOPIC=faces
+        depends_on:
+            kafka:
+                condition: service_healthy
+
+volumes:
+    photo-storage:

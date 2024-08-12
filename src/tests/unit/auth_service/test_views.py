@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 import httpx
 import pytest
 from fastapi import HTTPException, status
@@ -7,6 +9,7 @@ from app.auth_service.views import (
     check_token_dependency,
     login_view,
     register_view,
+    verify_view,
 )
 
 
@@ -145,5 +148,64 @@ async def test_check_token_dependency_fail(monkeypatch, status, detail):
     with pytest.raises(HTTPException) as excinfo:
         await check_token_dependency(user_id=0)
 
+    assert excinfo.value.status_code == status
+    assert excinfo.value.detail == detail
+
+
+@pytest.mark.asyncio
+async def test_verify_view(monkeypatch):
+    async def post_mock(*args, **kwargs) -> httpx.Response:
+        return httpx.Response(status.HTTP_201_CREATED)
+
+    monkeypatch.setattr(
+        'app.api_gateway.views.httpx.AsyncClient.post',
+        post_mock,
+    )
+
+    async def read_mock(*args, **kwargs) -> bytes:
+        return b'file'
+
+    upload_file_mock = Mock(read=read_mock)
+
+    result = await verify_view(upload_file_mock, 1)
+
+    assert result['message'] == 'File saved successfully'
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    'status, detail',
+    [
+        pytest.param(
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            'unprocessable',
+            id='unprocessable',
+        ),
+        pytest.param(
+            status.HTTP_400_BAD_REQUEST,
+            'bad request',
+            id='bad_request',
+        ),
+    ],
+)
+async def test_verify_view_fail(monkeypatch, status, detail):
+    async def post_mock(*args, **kwargs) -> httpx.Response:
+        return httpx.Response(status, json={'detail': detail})
+
+    monkeypatch.setattr(
+        'app.api_gateway.views.httpx.AsyncClient.post',
+        post_mock,
+    )
+
+    async def read_mock(*args, **kwargs) -> bytes:
+        return b'file'
+
+    upload_file_mock = Mock(read=read_mock)
+
+    # action
+    with pytest.raises(HTTPException) as excinfo:
+        await verify_view(upload_file_mock, 1)
+
+    # assert
     assert excinfo.value.status_code == status
     assert excinfo.value.detail == detail

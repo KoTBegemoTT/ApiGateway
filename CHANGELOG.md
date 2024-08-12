@@ -10,6 +10,13 @@
 
 - запуск бд в docker-compose
 
+## [3.1.0] - 2024-8-12
+
+### Добавлено
+
+- health check для kafka в docker-compose.yml
+- url /verify/, который принимает изображение и user id, и перенаправляет это на аналогичный url в auth service
+
 ## [3.0.0] - 2024-8-7
 
 ### Добавлено

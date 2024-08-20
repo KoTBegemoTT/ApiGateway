@@ -31,11 +31,34 @@ services:
             timeout: 5s
             retries: 20
 
+    database:
+        image: postgres:14
+        environment:
+            - POSTGRES_DB=lebedev_credit_card
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        healthcheck:
+          test: ["CMD-SHELL", "sh -c 'pg_isready -U postgres -d lebedev_credit_card'"]
+          interval: 10s
+          timeout: 3s
+          retries: 6
+
     api-gateway:
         build: .
         command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
         ports:
             - 8000:8000
+        environment:
+            - AUTH_HOST=auth
+            - AUTH_PORT=8001
+            - TRANSACTIONS_HOST=transaction
+            - TRANSACTIONS_PORT=8002
+            - FACE_VERIFICATION_HOST=face_verification
+            - FACE_VERIFICATION_PORT=8003
+        depends_on:
+            database:
+                condition: service_healthy
+
 
     auth:
         build: ./submodules/auth_service
@@ -48,16 +71,32 @@ services:
         environment:
             - KAFKA_HOST=kafka
             - KAFKA_PORT=9092
-            - KAFKA_PRODUCER_TOPIC=faces
+            - KAFKA_PRODUCER_TOPIC=lebedev_faces
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
+            - DB_HOST=database
+            - DB_NAME=lebedev_credit_card
         depends_on:
             kafka:
+                condition: service_healthy
+            database:
                 condition: service_healthy
 
     transaction:
         build: ./submodules/transaction_service
-        command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8002
+        command: >
+            bash -c "alembic upgrade head
+            && uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8002"
         ports:
             - 8002:8002
+        environment:
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
+            - DB_HOST=database
+            - DB_NAME=lebedev_credit_card
+        depends_on:
+            database:
+                condition: service_healthy
 
     face_verification:
         build: ./submodules/face_verification_service
@@ -70,9 +109,15 @@ services:
         environment:
             - KAFKA_HOST=kafka
             - KAFKA_PORT=9092
-            - KAFKA_CONSUMER_TOPIC=faces
+            - KAFKA_CONSUMER_TOPIC=lebedev_faces
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
+            - DB_HOST=database
+            - DB_NAME=lebedev_credit_card
         depends_on:
             kafka:
+                condition: service_healthy
+            database:
                 condition: service_healthy
 
 volumes:

@@ -2,13 +2,23 @@
 
 Все заметные изменения в этом проекте будут задокументированы в этом файле.
 
-Этот фармат основывается на [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), и этот проект придерживается [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Этот формат основывается на [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), и этот проект придерживается [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Предстоящие изменения]
 
 ### Добавлено
 
-- запуск бд в docker-compose
+- Конфигурация для запуска в kubernetes
+
+## [4.0.0] - 2024-8-20
+
+### Добавлено
+
+- Запуск postgres в docker compose.
+
+### Изменено
+
+- Теперь переменные настроек можно переопределять, с помощью env переменных.
 
 ## [3.1.0] - 2024-8-12
 

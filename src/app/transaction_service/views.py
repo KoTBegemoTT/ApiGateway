@@ -3,8 +3,8 @@ import httpx
 from app.settings import settings
 from app.transaction_service.schemas import (
     CreateTransactionSchema,
+    TransactionOutSchema,
     TransactionReportSchema,
-    TransactionSchema,
 )
 
 
@@ -21,7 +21,7 @@ async def create_transaction_view(
 
 async def get_transactions_view(
     report: TransactionReportSchema,
-) -> list[TransactionSchema]:
+) -> list[TransactionOutSchema]:
     """Получение списка транзакций."""
     async with httpx.AsyncClient() as client:
         response = await client.post(
@@ -30,6 +30,7 @@ async def get_transactions_view(
         )
 
     transactions = [
-        TransactionSchema(**transaction) for transaction in response.json()
+        TransactionOutSchema.model_validate(transaction)
+        for transaction in response.json()
     ]
     return transactions  # noqa: WPS331

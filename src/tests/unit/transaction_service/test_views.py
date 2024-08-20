@@ -48,10 +48,12 @@ async def test_get_transactions_view(monkeypatch):
             201,
             json=[
                 {
+                    'user_id': 1,
                     'amount': 100,
-                    'transaction_type': 'Пополнение',
+                    'transaction_type_id': 1,
                     'date': '2024-01-01',
-                },],
+                },
+            ],
         )
 
     monkeypatch.setattr(
@@ -70,5 +72,5 @@ async def test_get_transactions_view(monkeypatch):
 
     assert len(transacitons) == 1
     assert transacitons[0].amount == 100
-    assert transacitons[0].transaction_type.value == 'Пополнение'
+    assert transacitons[0].transaction_type_id
     assert transacitons[0].date == datetime(2024, 1, 1)

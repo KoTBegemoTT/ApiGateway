@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel, field_serializer
+from pydantic import BaseModel, ConfigDict, field_serializer
 
 
 class TransactionType(Enum):
@@ -15,7 +15,7 @@ class CreateTransactionSchema(BaseModel):
     """Схема создания транзакции."""
 
     user_id: int
-    amount: float
+    amount: int
     transaction_type: TransactionType
 
     @field_serializer('transaction_type')
@@ -27,8 +27,19 @@ class CreateTransactionSchema(BaseModel):
 class TransactionSchema(BaseModel):
     """Схема создания транзакции."""
 
-    amount: float
+    amount: int
     transaction_type: TransactionType
+    date: datetime
+
+
+class TransactionOutSchema(BaseModel):
+    """Схема вывода транзакции."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    user_id: int
+    amount: int
+    transaction_type_id: int
     date: datetime
 
 

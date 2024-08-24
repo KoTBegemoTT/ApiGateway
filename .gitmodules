@@ -1,12 +1,12 @@
 [submodule "auth_service"]
 	path = submodules/auth_service
 	url = git@hub.mos.ru:shift-python/y2024/homeworks/plebedev/authservice.git
-	branch = task_11
+	branch = task-12
 [submodule "transaction_service"]
 	path = submodules/transaction_service
 	url = git@hub.mos.ru:shift-python/y2024/homeworks/plebedev/transactionservice.git
-	branch = task-11
+	branch = task-12
 [submodule "face_verification_service"]
 	path = submodules/face_verification_service
 	url = git@hub.mos.ru:shift-python/y2024/homeworks/plebedev/faceverification.git
-	branch = task-11
+	branch = task-12

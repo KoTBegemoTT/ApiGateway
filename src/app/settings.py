@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     transactions_port: int = 8002
 
     face_verification_host: str = 'host.docker.internal'
-    face_verification_port: int = 8001
+    face_verification_port: int = 8003
 
     @property
     def auth_service_url(self) -> str:

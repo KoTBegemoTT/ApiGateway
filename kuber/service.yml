@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lebedev-api-gateway-service
+spec:
+  selector:
+    app: lebedev-api-gateway
+  ports:
+    - port: 8000
+      targetPort: 8000

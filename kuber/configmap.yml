@@ -3,11 +3,11 @@ kind: ConfigMap
 metadata:
   name: lebedev-api-gateway-configmap
 data:
-  auth_host: 'lebedev-auth-service'
-  auth_port: '8001'
+  auth_host: "lebedev-auth-service"
+  auth_port: "8001"
 
-  transactions_host: 'lebedev-transaction-service'
-  transactions_port: '8002'
+  transactions_host: "lebedev-transaction-service"
+  transactions_port: "8002"
 
-  face_verification_host: 'lebedev-face-verification-service'
-  face_verification_port: '8003'
+  face_verification_host: "lebedev-face-verification-service"
+  face_verification_port: "8003"

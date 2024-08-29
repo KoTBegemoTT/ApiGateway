@@ -5,13 +5,13 @@ class Settings(BaseSettings):
     """Класс настроек."""
 
     auth_host: str = 'host.docker.internal'
-    auth_port: int = 8001
+    auth_port: str = '8001'
 
     transactions_host: str = 'host.docker.internal'
-    transactions_port: int = 8002
+    transactions_port: str = '8002'
 
     face_verification_host: str = 'host.docker.internal'
-    face_verification_port: int = 8003
+    face_verification_port: str = '8003'
 
     @property
     def auth_service_url(self) -> str:

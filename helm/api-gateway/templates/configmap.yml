@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.name }}
+data:
+  auth_host: {{ .Values.configmap.data.auth_host }}
+  auth_port: {{ .Values.configmap.data.auth_port }}
+
+  transactions_host: {{ .Values.configmap.data.transactions_host }}
+  transactions_port: {{ .Values.configmap.data.transactions_port }}
+
+  face_verification_host: {{ .Values.configmap.data.face_verification_host }}
+  face_verification_port: {{ .Values.configmap.data.face_verification_port }}

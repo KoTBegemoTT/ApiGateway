@@ -8,7 +8,7 @@ image:
   repository: kotbegemott/api-gateway-service
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "3"
+  tag: "4"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -121,3 +121,8 @@ configmap:
 
     face_verification_host: "lebedev-face-verification"
     face_verification_port: "'8003'"
+
+jaeger_cofigmap:
+  name: lebedev-jaeger-configmap
+
+service_name: 'lebedev-APIGateway-service'

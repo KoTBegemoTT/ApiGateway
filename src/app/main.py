@@ -1,20 +1,47 @@
+from contextlib import asynccontextmanager
+
+import httpx
 import uvicorn
 from fastapi import FastAPI, status
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.api_gateway.urls import router as api_gateway_router
 from app.auth_service.urls import router as auth_router
+from app.external.jaeger import initialize_jaeger_tracer
 from app.face_verification_service.urls import (
     router as face_verification_router,
 )
+from app.HttpClients.auth_client import AuthServiceClient
+from app.HttpClients.transaction_client import TransactionServiceClient
+from app.middleware import tracing_middleware
+from app.settings import settings
 from app.transaction_service.urls import router as transaction_router
 
-app = FastAPI()
-app.include_router(auth_router, prefix='/auth-service')
-app.include_router(transaction_router, prefix='/transaction-service')
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Настройка при запуске и остановке приложения."""
+    session = httpx.AsyncClient()
+    initialize_jaeger_tracer()
+    yield {
+        'auth_client': AuthServiceClient(session, settings.auth_service_url),
+        'transaction_client': TransactionServiceClient(
+            session,
+            settings.transactions_service_url,
+        ),
+    }
+
+
+app = FastAPI(lifespan=lifespan)
+
+app.include_router(auth_router, prefix='/api/auth-service')
+app.include_router(transaction_router, prefix='/api/transaction-service')
 app.include_router(
-    face_verification_router, prefix='/face-verification-service',
+    face_verification_router, prefix='/api/face-verification-service',
 )
-app.include_router(api_gateway_router, prefix='/api-gateway')
+app.include_router(api_gateway_router, prefix='/api/api-gateway')
+
+app.add_middleware(BaseHTTPMiddleware, dispatch=tracing_middleware)
 
 
 @app.get('/')

@@ -43,6 +43,19 @@ services:
           timeout: 3s
           retries: 6
 
+    prometheus:
+        image: prom/prometheus
+        volumes:
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml
+        ports:
+        - "9090:9090"
+
+    jaeger:
+        image: jaegertracing/all-in-one
+        ports:
+        - "6831:6831/udp"
+        - "16686:16686"
+
     api-gateway:
         build: .
         command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
@@ -55,6 +68,10 @@ services:
             - TRANSACTIONS_PORT=8002
             - FACE_VERIFICATION_HOST=face_verification
             - FACE_VERIFICATION_PORT=8003
+            - JAEGER_AGENT_HOST=jaegerrrrrr
+            - JAEGER_AGENT_PORT=6831
+            - JAEGER_SAMPLER_PARAM=1.0
+
         depends_on:
             database:
                 condition: service_healthy
@@ -76,6 +93,9 @@ services:
             - DB_PASSWORD=postgres
             - DB_HOST=database
             - DB_NAME=lebedev_credit_card
+            - JAEGER_AGENT_HOST=jaeger
+            - JAEGER_AGENT_PORT=6831
+            - JAEGER_SAMPLER_PARAM=1.0
         depends_on:
             kafka:
                 condition: service_healthy
@@ -94,6 +114,9 @@ services:
             - DB_PASSWORD=postgres
             - DB_HOST=database
             - DB_NAME=lebedev_credit_card
+            - JAEGER_AGENT_HOST=jaeger
+            - JAEGER_AGENT_PORT=6831
+            - JAEGER_SAMPLER_PARAM=1.0
         depends_on:
             database:
                 condition: service_healthy

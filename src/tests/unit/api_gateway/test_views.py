@@ -42,9 +42,9 @@ async def test_ready_check(monkeypatch):
 )
 async def test_ready_check_fail(monkeypatch, auth_status, transactions_status):
     async def get_mock(self, url, *args, **kwargs) -> httpx.Response:
-        if url == f'{settings.auth_service_url}/healthz/ready/':
+        if url == f'{settings.auth_service_url}/api/healthz/ready/':
             return httpx.Response(auth_status)
-        elif url == f'{settings.transactions_service_url}/healthz/ready/':
+        elif url == f'{settings.transactions_service_url}/api/healthz/ready/':
             return httpx.Response(transactions_status)
 
         raise ValueError('Wrong url')

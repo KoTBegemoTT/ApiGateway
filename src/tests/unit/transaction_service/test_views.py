@@ -1,4 +1,5 @@
 from datetime import datetime
+from unittest.mock import Mock
 
 import httpx
 import pytest
@@ -33,12 +34,10 @@ async def test_create_transaction_view_no_error(monkeypatch, transaction):
     async def post_mock(*args, **kwargs) -> httpx.Response:
         return httpx.Response(201)
 
-    monkeypatch.setattr(
-        'app.transaction_service.views.httpx.AsyncClient.post',
-        post_mock,
-    )
+    request = Mock()
+    request.state.transaction_client.create_transaction = post_mock
 
-    await create_transaction_view(transaction)
+    await create_transaction_view(transaction, request)
 
 
 @pytest.mark.asyncio
@@ -56,10 +55,8 @@ async def test_get_transactions_view(monkeypatch):
             ],
         )
 
-    monkeypatch.setattr(
-        'app.transaction_service.views.httpx.AsyncClient.post',
-        post_mock,
-    )
+    request = Mock()
+    request.state.transaction_client.get_transactions = post_mock
 
     transacitons = await get_transactions_view(
         TransactionReportSchema
@@ -68,6 +65,7 @@ async def test_get_transactions_view(monkeypatch):
             date_start=datetime(2024, 1, 1),
             date_end=datetime(2124, 1, 1),
         ),
+        request,
     )
 
     assert len(transacitons) == 1

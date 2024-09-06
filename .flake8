@@ -1,16 +1,24 @@
 [flake8]
 ignore =
     D100,
+    # Missing docstring in __init__
+    D107,
     DAR101,
     DAR201,
     DAR301,
     DAR401,
     # Missing docstring in public package
     D104,
+    # Found wrong variable name: params
+    WPS110,
     # Found upper-case constant in a class
     WPS115,
+    # Found module with too many imports
+    WPS201,
     # Found string literal over-use
     WPS226,
+    # Found too long ``try`` body length
+    WPS229,
     # Found `f` string
     WPS305,
     # Found using `@staticmethod`

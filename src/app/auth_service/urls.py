@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, status
+from fastapi import APIRouter, Request, UploadFile, status
 
 from app.auth_service.schemas import TokenSchema, UserSchema
 from app.auth_service.views import (
@@ -16,9 +16,9 @@ router = APIRouter(tags=['auth_service'])
     response_model=TokenSchema,
     status_code=status.HTTP_201_CREATED,
 )
-async def register(user_in: UserSchema) -> TokenSchema:
+async def register(user_in: UserSchema, request: Request) -> TokenSchema:
     """Регистрация пользователя."""
-    return await register_view(user_in)
+    return await register_view(user_in, request)
 
 
 @router.post(
@@ -26,25 +26,29 @@ async def register(user_in: UserSchema) -> TokenSchema:
     response_model=TokenSchema,
     status_code=status.HTTP_201_CREATED,
 )
-async def login(user_in: UserSchema) -> TokenSchema:
+async def login(user_in: UserSchema, request: Request) -> TokenSchema:
     """Авторизация пользователя."""
-    return await login_view(user_in)
+    return await login_view(user_in, request)
 
 
 @router.get(
     '/check_token/',
     status_code=status.HTTP_200_OK,
 )
-async def check_token(user_id: int) -> None:
+async def check_token(user_id: int, request: Request) -> None:
     """Проверка токена. Возвращает имя пользователя."""
-    await check_token_dependency(user_id)
+    await check_token_dependency(user_id, request)
 
 
 @router.post(
     '/verify/',
     status_code=status.HTTP_201_CREATED,
 )
-async def verify(user_photo: UploadFile, user_id: int) -> dict:
+async def verify(
+    user_photo: UploadFile,
+    user_id: int,
+    request: Request,
+) -> dict:
     """Подтверждение пользователя."""
-    await check_token_dependency(user_id)
-    return await verify_view(user_photo, user_id)
+    await check_token_dependency(user_id, request)
+    return await verify_view(user_photo, user_id, request)

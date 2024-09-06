@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.12"
 fastapi = "^0.111.1"
 pydantic-settings = "^2.4.0"
+jaeger-client = "^4.8.0"
 
 [tool.poetry.group.dev.dependencies]
 wemake-python-styleguide = "^0.19.2"
@@ -29,6 +30,9 @@ line_length = '79'
 [tool.pytest.ini_options]
 pythonpath = ". src"
 testpaths = ["src/tests"]
+
+[tool.mypy]
+disable_error_code = 'import-untyped'
 
 [tool.coverage.run]
 command_line = "-m pytest"

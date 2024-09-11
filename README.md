@@ -97,5 +97,5 @@ helm install my-release-name .
 
 ```bash
 cd helm/api-gateway
-helm install my-release-name --values test-values.yaml
+helm install my-release-name --values ./values/test.yaml
 ```

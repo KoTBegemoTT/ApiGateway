@@ -36,8 +36,66 @@
 | ------ | ------------------------------------------ | ---------------------------------------------- |
 | GET    | /api/face-verification-service/get_vector/ | Получение векторного представления изображения |
 
-## ИнфраструктураS
+## Инфраструктура
 
-![test](ifra.png)
+![infra image](images/infra.png)
 
-## Something
+### Redis
+
+Редис используется для хранения ранее полученной информации из базы, тем самым снижая на неё нагрузку.
+
+### Postgresql
+
+База данных Postgresql хранит в себе всю информацию, чувствительную к потере.
+
+![db structure](images/backend_card_1.png)
+
+### Kafka
+
+Кафка принимает сообщения из сервиса auth, которые содержат путь до изображения. 
+Эти сообщения потребляет сервис face-verification.
+
+## Инструкция по запуску
+
+### Перед началом
+
+* Установить docker
+
+### Запуск
+
+```bash
+docker compose build
+docker compose up
+```
+
+### Важные эндпоинты *
+* [http://localhost:8000/docs](http://localhost:8000/docs) - Gateway
+* [http://localhost:8001/docs](http://localhost:8001/docs) - Auth
+* [http://localhost:8002/docs](http://localhost:8002/docs) - Transaction
+* [http://localhost:8003/docs](http://localhost:8003/docs) - Face verification
+
+* [http://localhost:9090](http://localhost:9090) - Веб интерфейс Prometheus
+* [http://localhost:16686](http://localhost:16686) - Веб интерфейс Jaeger
+
+## Развёртывание в kubernetes
+
+### Порядок развёртывания
+
+1. Transaction
+2. Auth
+3. Face-Verification
+4. ApiGateway
+
+### Продакшен
+
+```bash
+cd helm/api-gateway
+helm install my-release-name .
+```
+
+### Тестирование
+
+```bash
+cd helm/api-gateway
+helm install my-release-name --values test-values.yaml
+```

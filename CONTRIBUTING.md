@@ -12,6 +12,7 @@
 - По необходимости установить и настроить kubectl, внутри контейнера будут использованы настройки с хоста
 - Склонировать этот репозиторий на рабочую станцию
 - Открыть директорию с репозиторием через Visual Studio Code
+- Обновить сабмодули командой `git submodule update --remote`
 - Установить [рекомендуемые плагины](.vscode/extensions.json) Visual Studio Code
 - Ввести `Ctrl+Shift+P` или `Cmd+Shift+P` и выбрать `Dev Containers: Rebuild and Reopen in Container`
 
@@ -20,3 +21,4 @@
 - Исходный код проекта: src/app
 - Тесты src/tests
 - Сабмодули ./submodules
+- Helm чарты ./helm/api-gateway

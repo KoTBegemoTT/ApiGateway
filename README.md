@@ -7,11 +7,14 @@
 - [TransactionService](https://github.com/KoTBegemoTT/TransactionService)
 - [FaceVerification](https://github.com/KoTBegemoTT/FaceVerification)
 
+
+## Методы для обращения к сервисам
+
+### APIGateway
+
 | Method | Path                            | Description              |
 | ------ | ------------------------------- | ------------------------ |
 | GET    | /api/api-gateway/healthz/ready/ | Проверка статуса сервиса |
-
-## Методы для обращения к другим сервисам
 
 ### Auth service
 

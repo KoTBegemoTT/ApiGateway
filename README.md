@@ -2,6 +2,11 @@
 
 Этот сервис является точкой входа для обращения к другим.
 
+Связанные сервисы: 
+- [AuthService](https://github.com/KoTBegemoTT/AuthService)
+- [TransactionService](https://github.com/KoTBegemoTT/TransactionService)
+- [FaceVerification](https://github.com/KoTBegemoTT/FaceVerification)
+
 | Method | Path                            | Description              |
 | ------ | ------------------------------- | ------------------------ |
 | GET    | /api/api-gateway/healthz/ready/ | Проверка статуса сервиса |
